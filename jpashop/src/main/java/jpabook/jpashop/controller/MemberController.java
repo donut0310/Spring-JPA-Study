@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -23,7 +25,7 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    public String create(@Valid  MemberForm form, BindingResult result) {
+    public String create(@Valid MemberForm form, BindingResult result) {
         // BindingResult -> validator 결과 오류가 있어도 아래 코드가 실행된다.
         if (result.hasErrors()) {
             return "members/createMemberForm";
@@ -37,5 +39,12 @@ public class MemberController {
 
         memberService.join(member);
         return "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
     }
 }
