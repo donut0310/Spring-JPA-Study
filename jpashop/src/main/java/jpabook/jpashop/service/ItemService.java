@@ -19,6 +19,17 @@ public class ItemService {
         itemRepository.save(item);
     }
 
+    /**
+     * 트랜잭션이 있는 서비스 계층에서 엔티티를 직접 변경해야
+     * 트랜잭션 커밋 시점에 변경 감지가 실행된다.
+     */
+    @Transactional
+    public void updateItem(Long itemId, String name, int price, int stockQuantity) {
+        Item item = itemRepository.findOne(itemId);
+        item.setName(name);
+        item.setPrice(price);
+        item.setStockQuantity(stockQuantity);
+    }
     public List<Item> findItems() {
         return itemRepository.findAll();
     }
